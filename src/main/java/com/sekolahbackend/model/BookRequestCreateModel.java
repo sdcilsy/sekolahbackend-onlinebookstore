@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sekolahbackend.entity.Book;
 
 import lombok.Data;
 
@@ -33,4 +34,7 @@ public class BookRequestCreateModel {
 	
 	@NotNull
 	private Integer bookCategoryId;
+	
+	@NotNull
+	private Book.BookStatus bookStatus;
 }

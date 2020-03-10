@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sekolahbackend.entity.Book;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,4 +27,6 @@ public class BookModel extends PersistenceModel {
 	private Integer bookCategoryId;
 	
 	private BookCategoryModel bookCategory;
+	
+	private Book.BookStatus bookStatus;
 }
