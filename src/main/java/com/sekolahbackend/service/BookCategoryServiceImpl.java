@@ -16,7 +16,6 @@ import com.sekolahbackend.entity.Persistence.Status;
 import com.sekolahbackend.model.BookCategoryModel;
 import com.sekolahbackend.repository.BookCategoryRepository;
 
-
 @Service
 public class BookCategoryServiceImpl implements BookCategoryService {
 
@@ -28,26 +27,20 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 	public BookCategoryModel saveOrUpdate(BookCategoryModel entity) {
 		BookCategory bookCategory;
 		if (entity.getId() != null) {
-			bookCategory = bookCategoryRepository.getOne(entity.getId());
+			bookCategory = bookCategoryRepository.findById(entity.getId()).orElse(null);
 			if (bookCategory == null)
 				throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id: " + entity.getId() + " not found");
 			
 			bookCategory.setCode(entity.getCode());
 			bookCategory.setName(entity.getName());
-			bookCategoryRepository.save(bookCategory);
-			
-			entity.setUpdatedBy(bookCategory.getUpdatedBy());
-			entity.setUpdatedTime(bookCategory.getUpdatedTime());
-			
-			return entity;
+			bookCategory = bookCategoryRepository.save(bookCategory);
 		} else {
 			bookCategory = new BookCategory();
 			bookCategory.setCode(entity.getCode());
 			bookCategory.setName(entity.getName());
-			bookCategoryRepository.save(bookCategory);
-			
-			BeanUtils.copyProperties(bookCategory, entity);
+			bookCategory = bookCategoryRepository.save(bookCategory);
 		}
+		BeanUtils.copyProperties(bookCategory, entity);
 		return entity;
 	}
 
@@ -55,17 +48,19 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public BookCategoryModel delete(BookCategoryModel entity) {
 		if (entity.getId() != null) {
-			BookCategory bookCategory = bookCategoryRepository.getOne(entity.getId());
+			BookCategory bookCategory = bookCategoryRepository.findById(entity.getId()).orElse(null);
 			if (bookCategory == null)
 				throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id: " + entity.getId() + " not found");
 
-			bookCategory.setStatus(Status.NOT_ACTIVE);
-			bookCategoryRepository.save(bookCategory);
-			BeanUtils.copyProperties(bookCategory, entity);
+			if (bookCategory.getBooks() != null && bookCategory.getBooks().size() > 0)
+				throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category cannot be deleted because already used in Books");
 			
+			bookCategory.setStatus(Status.NOT_ACTIVE);
+			bookCategory = bookCategoryRepository.save(bookCategory);
+			BeanUtils.copyProperties(bookCategory, entity);
 			return entity;
-		}
-		return null;
+		} else
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id id cannot be null");
 	}
 
 	@Override
@@ -77,13 +72,15 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 			if (bookCategory == null)
 				throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id: " + id + " not found");
 			
-			bookCategory.setStatus(Status.NOT_ACTIVE);
-			bookCategoryRepository.save(bookCategory);
-			BeanUtils.copyProperties(bookCategory, entity);
+			if (bookCategory.getBooks() != null && bookCategory.getBooks().size() > 0)
+				throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category cannot be deleted because already used in Books");
 			
+			bookCategory.setStatus(Status.NOT_ACTIVE);
+			bookCategory = bookCategoryRepository.save(bookCategory);
+			BeanUtils.copyProperties(bookCategory, entity);
 			return entity;
-		}
-		return null;
+		} else
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id id cannot be null");
 	}
 
 	@Override
@@ -94,11 +91,11 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 			BookCategory bookCategory = bookCategoryRepository.findById(id).orElse(null);
 			if (bookCategory == null)
 				throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id: " + id + " not found");
-			BeanUtils.copyProperties(bookCategory, entity);
 			
+			BeanUtils.copyProperties(bookCategory, entity);
 			return entity;
-		}
-		return null;
+		} else
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id id cannot be null");
 	}
 
 	@Override
