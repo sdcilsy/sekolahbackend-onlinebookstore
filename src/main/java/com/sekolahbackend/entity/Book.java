@@ -13,6 +13,11 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Where;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "book")
 @Where(clause = "status = 'ACTIVE'")
