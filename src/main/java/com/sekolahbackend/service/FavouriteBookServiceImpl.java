@@ -194,4 +194,28 @@ public class FavouriteBookServiceImpl implements FavouriteBookService {
 	public Long countAll() {
 		return favouriteBookRepository.count();
 	}
+
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public List<FavouriteBookModel> findByUserId(Integer userId) {
+		List<FavouriteBookModel> entities = new ArrayList<>();
+		favouriteBookRepository.findByUserId(userId).forEach(data -> {
+			FavouriteBookModel entity = new FavouriteBookModel();
+			UserModel userModel = new UserModel();
+			List<FavouriteBookModel.DetailModel> favouriteBookDetails = new ArrayList<>();
+			
+			data.getFavouriteBookDetails().forEach(detail -> {
+				FavouriteBookModel.DetailModel favouriteBookModelDetail = new FavouriteBookModel.DetailModel();
+				BeanUtils.copyProperties(detail, favouriteBookModelDetail);
+				favouriteBookDetails.add(favouriteBookModelDetail);
+			});
+			BeanUtils.copyProperties(data.getUser(), userModel);
+			entity.setDetails(favouriteBookDetails);
+			entity.setUserModel(userModel);
+			
+			entities.add(entity);
+		});
+		return entities;
+	}
+	
 }

@@ -73,4 +73,9 @@ public class FavouriteBookRestController {
 	public FavouriteBookModel findById(@PathVariable("id") final Integer id) {
 		return favouriteBookService.findById(id);
 	}
+	
+	@GetMapping("/findByUserId/{userId}")
+	public List<FavouriteBookModel> findByUserId(@PathVariable("userId") final Integer userId) {
+		return favouriteBookService.findByUserId(userId);
+	}
 }
