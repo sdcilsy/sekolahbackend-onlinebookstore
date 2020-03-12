@@ -62,7 +62,7 @@ public class BookRestController {
 	}
 	
 	@DeleteMapping("/deleteById/{id}")
-	public BookModel saveOrUpdate(@PathVariable("id") final Integer id) {
+	public BookModel delete(@PathVariable("id") final Integer id) {
 		return bookService.deleteById(id);
 	}
 
