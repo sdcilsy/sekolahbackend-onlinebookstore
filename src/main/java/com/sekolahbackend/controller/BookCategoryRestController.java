@@ -62,7 +62,7 @@ public class BookCategoryRestController {
 	}
 	
 	@DeleteMapping("/deleteById/{id}")
-	public BookCategoryModel saveOrUpdate(@PathVariable("id") final Integer id) {
+	public BookCategoryModel delete(@PathVariable("id") final Integer id) {
 		return bookCategoryService.deleteById(id);
 	}
 

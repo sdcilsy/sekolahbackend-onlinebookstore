@@ -60,7 +60,7 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 			BeanUtils.copyProperties(bookCategory, entity);
 			return entity;
 		} else
-			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id id cannot be null");
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Id cannot be null");
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 			BeanUtils.copyProperties(bookCategory, entity);
 			return entity;
 		} else
-			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id id cannot be null");
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Id cannot be null");
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 			BeanUtils.copyProperties(bookCategory, entity);
 			return entity;
 		} else
-			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book Category with id id cannot be null");
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Id cannot be null");
 	}
 
 	@Override
