@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -19,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sekolahbackend.model.FavouriteBookModel;
-import com.sekolahbackend.model.FavouriteBookRequestCreateModel;
-import com.sekolahbackend.model.FavouriteBookRequestUpdateModel;
+import com.sekolahbackend.model.FavouriteBookRequestModel;
 import com.sekolahbackend.service.FavouriteBookService;
 
 import io.swagger.annotations.Api;
@@ -33,35 +31,20 @@ public class FavouriteBookRestController {
 	@Autowired
 	private FavouriteBookService favouriteBookService;
 
-	@PostMapping("/save")
-	public FavouriteBookModel save(@RequestBody @Valid FavouriteBookRequestCreateModel request, BindingResult result,
+	@PostMapping("/saveOrUpdate")
+	public FavouriteBookModel saveOrUpdate(@RequestBody @Valid FavouriteBookRequestModel request, BindingResult result,
 			HttpServletResponse response) throws IOException {
-		FavouriteBookModel bookModel = new FavouriteBookModel();
+		FavouriteBookModel favouriteBookModel = new FavouriteBookModel();
 		if (result.hasErrors()) {
 			response.sendError(HttpStatus.BAD_REQUEST.value(), result.getAllErrors().toString());
-			return bookModel;
-		} else {
-			BeanUtils.copyProperties(request, bookModel);
-			return favouriteBookService.saveOrUpdate(bookModel);
-		}
+			return favouriteBookModel;
+		} else 
+			return favouriteBookService.saveOrUpdate(request);
 	}
 
-	@PostMapping("/update")
-	public FavouriteBookModel update(@RequestBody @Valid FavouriteBookRequestUpdateModel request, BindingResult result,
-			HttpServletResponse response) throws IOException {
-		FavouriteBookModel bookModel = new FavouriteBookModel();
-		if (result.hasErrors()) {
-			response.sendError(HttpStatus.BAD_REQUEST.value(), result.getAllErrors().toString());
-			return bookModel;
-		} else {
-			BeanUtils.copyProperties(request, bookModel);
-			return favouriteBookService.saveOrUpdate(bookModel);
-		}
-	}
-
-	@DeleteMapping("/deleteById/{id}")
-	public FavouriteBookModel delete(@PathVariable("id") final Integer id) {
-		return favouriteBookService.deleteById(id);
+	@DeleteMapping("/deleteByFavouriteBookDetailId/{detailId}")
+	public FavouriteBookModel delete(@PathVariable("detailId") final Integer detailId) {
+		return favouriteBookService.deleteByFavouriteBookDetailId(detailId);
 	}
 
 	@GetMapping("/findAll")
@@ -75,7 +58,7 @@ public class FavouriteBookRestController {
 	}
 	
 	@GetMapping("/findByUserId/{userId}")
-	public List<FavouriteBookModel> findByUserId(@PathVariable("userId") final Integer userId) {
+	public FavouriteBookModel findByUserId(@PathVariable("userId") final Integer userId) {
 		return favouriteBookService.findByUserId(userId);
 	}
 }

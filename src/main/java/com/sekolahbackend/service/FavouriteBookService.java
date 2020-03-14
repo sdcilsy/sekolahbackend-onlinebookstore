@@ -1,11 +1,13 @@
 package com.sekolahbackend.service;
 
-import java.util.List;
-
 import com.sekolahbackend.model.FavouriteBookModel;
+import com.sekolahbackend.model.FavouriteBookRequestModel;
 
 public interface FavouriteBookService extends PersistenceService<FavouriteBookModel, Integer> {
 
-	List<FavouriteBookModel> findByUserId(Integer userId);
+	FavouriteBookModel saveOrUpdate(FavouriteBookRequestModel request);
 	
+	FavouriteBookModel findByUserId(Integer userId);
+	
+	FavouriteBookModel deleteByFavouriteBookDetailId(Integer detailId);
 }
