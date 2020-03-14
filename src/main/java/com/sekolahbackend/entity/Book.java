@@ -27,7 +27,8 @@ import lombok.Setter;
 @Table(name = "book")
 @Where(clause = "status = 'ACTIVE'")
 public class Book extends Persistence {
-	
+	private static final long serialVersionUID = 6338210243334147241L;
+
 	public enum BookStatus {
 		FOR_SELL, OUT_OF_STOCK, HIDE
 	}

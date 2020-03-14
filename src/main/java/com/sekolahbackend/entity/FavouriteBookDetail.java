@@ -17,6 +17,7 @@ import lombok.Setter;
 @Table(name = "favourite_book_detail")
 @Where(clause = "status = 'ACTIVE'")
 public class FavouriteBookDetail extends Persistence {
+	private static final long serialVersionUID = 1130010943968579177L;
 
 	@JoinColumn(name = "book_id")
 	@ManyToOne(targetEntity = Book.class, fetch = FetchType.LAZY)

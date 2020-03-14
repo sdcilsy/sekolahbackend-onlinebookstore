@@ -1,5 +1,6 @@
 package com.sekolahbackend.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "user")
 @Where(clause = "status = 'ACTIVE'")
-public class User extends Persistence {
+public class User extends Persistence implements Serializable {
+	private static final long serialVersionUID = 4457669404205697511L;
 
 	@NotNull
 	@Size(min = 5, max = 50)
