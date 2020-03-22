@@ -16,7 +16,7 @@ import com.sekolahbackend.service.UserService;
 
 @Configuration
 @EnableAuthorizationServer
-public class OAuthConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
 	@Autowired
     private AuthenticationManager authenticationManager;
