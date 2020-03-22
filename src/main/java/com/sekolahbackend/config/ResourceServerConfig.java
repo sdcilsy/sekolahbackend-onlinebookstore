@@ -19,18 +19,18 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(ResourceServerSecurityConfigurer resources) {
 		resources.resourceId(resourceId);
 	}
-
+	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		http
+			.authorizeRequests().antMatchers("/api/rest**").authenticated()
+			.anyRequest().authenticated()
 			.and()
-			.antMatcher("/api/**")
-			.authorizeRequests()
-			.antMatchers("/api/rest**").hasAnyRole("ROLE_ADMIN", "ROLE_USER")
-			.antMatchers("/api/**").authenticated()
-            .anyRequest().authenticated();
-		
+			.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.	anonymous()
+			.disable();
 	}
 
 }
