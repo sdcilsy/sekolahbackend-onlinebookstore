@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
 
 import com.sekolahbackend.entity.Persistence.Status;
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 	
 	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByUsername(username);
 		Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
@@ -48,6 +51,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public UserModel register(UserRequestModel requestModel) {
 		User userByUsername = userRepository.findByUsername(requestModel.getUsername());
 		if (userByUsername != null && userByUsername.getId() != null)
