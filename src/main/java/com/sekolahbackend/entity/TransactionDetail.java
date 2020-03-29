@@ -1,10 +1,12 @@
 package com.sekolahbackend.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
@@ -30,4 +32,8 @@ public class TransactionDetail extends Persistence {
 	@JoinColumn(name = "transaction_id")
 	@ManyToOne(targetEntity = Transaction.class, fetch = FetchType.LAZY)
 	private Transaction transaction;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cart_detail_id", referencedColumnName = "id")
+	private CartDetail cartDetail;
 }
