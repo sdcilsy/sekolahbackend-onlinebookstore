@@ -1,5 +1,6 @@
 package com.sekolahbackend.entity;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,9 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -55,6 +59,11 @@ public class Transaction extends Persistence {
 	@Column(length = 50)
 	@Enumerated(EnumType.STRING)
 	private PaymentMethod paymentMethod;
+	
+	@Column
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreatedDate
+	private Date paymentTime;
 	
 	@Where(clause = "status = 'ACTIVE'")
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "transaction", fetch = FetchType.LAZY)
