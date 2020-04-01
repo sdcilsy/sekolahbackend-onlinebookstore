@@ -44,6 +44,7 @@ public class TransactionController {
 			return transactionService.save(request);
 	}
 	
+	// FIXME: separate into confirm payment and settlement
 	@PostMapping("/payment")
 	public TransactionModel payment(@RequestBody @Valid TransactionUpdateRequestModel request, BindingResult result,
 			HttpServletResponse response) throws IOException {
