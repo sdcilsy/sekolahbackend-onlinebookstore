@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ public class BookRestController {
 	@Autowired
 	private BookService bookService;
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/save")
 	public BookModel save(@RequestBody @Valid BookRequestCreateModel request, 
 			BindingResult result,
@@ -47,6 +49,7 @@ public class BookRestController {
 		}
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/update")
 	public BookModel update(@RequestBody @Valid BookRequestUpdateModel request, 
 			BindingResult result,
@@ -61,16 +64,19 @@ public class BookRestController {
 		}
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/deleteById/{id}")
 	public BookModel delete(@PathVariable("id") final Integer id) {
 		return bookService.deleteById(id);
 	}
 
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT', 'ROLE_USER')")
 	@GetMapping("/findAll")
 	public List<BookModel> findAll() {
 		return bookService.findAll();
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT', 'ROLE_USER')")
 	@GetMapping("/findById/{id}")
 	public BookModel findById(@PathVariable("id") final Integer id) {
 		return bookService.findById(id);

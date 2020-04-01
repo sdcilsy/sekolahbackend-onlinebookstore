@@ -26,6 +26,7 @@ import io.swagger.annotations.Api;
 @Api
 @RestController
 @RequestMapping("/api/rest/transaction")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 public class TransactionController {
 
 	@Autowired
