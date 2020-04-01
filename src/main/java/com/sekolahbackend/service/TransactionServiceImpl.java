@@ -2,11 +2,13 @@ package com.sekolahbackend.service;
 
 import static com.sekolahbackend.util.TransactionModelMapper.constructModel;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -91,9 +93,22 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 	
 	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public TransactionModel update(TransactionUpdateRequestModel request) {
-		// TODO: add implementation here
-		return null;
+		Transaction transaction = transactionRepository.findById(request.getTransactionId()).orElse(null);
+		if (transaction == null)
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Transaction with id: " + request.getTransactionId() + " not found");
+		
+		if (!transaction.getTransactionStatus().equals(TransactionStatus.SETTLED)) {
+			if (StringUtils.isNotBlank(request.getReceiptImageUrl()))
+				transaction.setReceiptImageUrl(request.getReceiptImageUrl());
+			if (request.getTransactionStatus().equals(TransactionStatus.SETTLED))
+				transaction.setPaymentTime(new Date());
+			transaction.setTransactionStatus(request.getTransactionStatus());
+			transaction = transactionRepository.save(transaction);
+		} else
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Transaction with id: " + transaction.getId() + " already SETTLED");
+		return constructModel(transaction);
 	}
 
 	@Override

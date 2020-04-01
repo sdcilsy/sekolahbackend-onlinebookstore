@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sekolahbackend.model.TransactionCreateRequestModel;
 import com.sekolahbackend.model.TransactionModel;
+import com.sekolahbackend.model.TransactionUpdateRequestModel;
 import com.sekolahbackend.service.TransactionService;
 
 import io.swagger.annotations.Api;
@@ -32,7 +33,6 @@ public class TransactionController {
 	@Autowired
 	private TransactionService transactionService;
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@PostMapping("/checkout")
 	public TransactionModel checkout(@RequestBody @Valid TransactionCreateRequestModel request, BindingResult result,
 			HttpServletResponse response) throws IOException {
@@ -44,19 +44,27 @@ public class TransactionController {
 			return transactionService.save(request);
 	}
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+	@PostMapping("/payment")
+	public TransactionModel payment(@RequestBody @Valid TransactionUpdateRequestModel request, BindingResult result,
+			HttpServletResponse response) throws IOException {
+		TransactionModel transactionModel = new TransactionModel();
+		if (result.hasErrors()) {
+			response.sendError(HttpStatus.BAD_REQUEST.value(), result.getAllErrors().toString());
+			return transactionModel;
+		} else 
+			return transactionService.update(request);
+	}
+	
 	@GetMapping("/findAll")
 	public List<TransactionModel> findAll() {
 		return transactionService.findAll();
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("/findById/{id}")
 	public TransactionModel findById(@PathVariable("id") final Integer id) {
 		return transactionService.findById(id);
 	}
 	
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	@GetMapping("/findByUserId/{userId}")
 	public List<TransactionModel> findByUserId(@PathVariable("userId") final Integer userId) {
 		return transactionService.findByUserId(userId);
