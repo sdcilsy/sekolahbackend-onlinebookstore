@@ -16,6 +16,7 @@ import com.sekolahbackend.entity.Persistence.Status;
 import com.sekolahbackend.entity.Shipment;
 import com.sekolahbackend.entity.Shipment.ShipmentStatus;
 import com.sekolahbackend.entity.Transaction;
+import com.sekolahbackend.entity.Transaction.TransactionStatus;
 import com.sekolahbackend.entity.User;
 import com.sekolahbackend.model.ShipmentCreateRequestModel;
 import com.sekolahbackend.model.ShipmentModel;
@@ -53,6 +54,8 @@ public class ShipmentServiceImpl implements ShipmentService {
 		Transaction transaction = transactionRepository.findById(request.getTransactionId()).orElse(null);
 		if (transaction == null)
 			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Transaction with id: " + request.getUserId() + " not found");
+		if (!transaction.getTransactionStatus().equals(TransactionStatus.SETTLED))
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Transaction with id: " + request.getUserId() + " is not SETTLED");
 		
 		Shipment shipment = new Shipment();
 		shipment.setAddress(user.getAddress());
