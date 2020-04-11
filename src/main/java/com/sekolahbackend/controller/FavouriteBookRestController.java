@@ -63,4 +63,10 @@ public class FavouriteBookRestController {
 	public FavouriteBookModel findByUserId(@PathVariable("userId") final Integer userId) {
 		return favouriteBookService.findByUserId(userId);
 	}
+	
+	@PreAuthorize("#username == authentication.principal.username")
+	@GetMapping("/findByUsername/{username}")
+	public FavouriteBookModel findByUsername(@PathVariable("username") final String username) {
+		return favouriteBookService.findByUsername(username);
+	}
 }

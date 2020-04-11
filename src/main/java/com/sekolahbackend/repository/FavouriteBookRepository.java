@@ -8,4 +8,5 @@ public interface FavouriteBookRepository extends JpaRepository<FavouriteBook, In
 
 	FavouriteBook findByUserId(Integer userId);
 	
+	FavouriteBook findByUserUsername(String username);
 }

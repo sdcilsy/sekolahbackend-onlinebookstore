@@ -9,5 +9,7 @@ public interface FavouriteBookService extends PersistenceService<FavouriteBookMo
 	
 	FavouriteBookModel findByUserId(Integer userId);
 	
+	FavouriteBookModel findByUsername(String username);
+	
 	FavouriteBookModel deleteByFavouriteBookDetailId(Integer detailId);
 }

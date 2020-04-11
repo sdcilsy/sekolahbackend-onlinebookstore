@@ -133,5 +133,13 @@ public class FavouriteBookServiceImpl implements FavouriteBookService {
 	public FavouriteBookModel findByUserId(Integer userId) {
 		return constructModel(favouriteBookRepository.findByUserId(userId));
 	}
+
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public FavouriteBookModel findByUsername(String username) {
+		return constructModel(favouriteBookRepository.findByUserUsername(username));
+	}
+	
+	
 	
 }
