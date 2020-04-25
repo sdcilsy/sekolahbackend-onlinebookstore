@@ -2,6 +2,7 @@ package com.sekolahbackend.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sekolahbackend.entity.Book;
 import com.sekolahbackend.entity.BookCategory;
@@ -27,6 +29,9 @@ public class BookServiceImpl implements BookService {
 	
 	@Autowired
 	private BookCategoryRepository bookCategoryRepository;
+	
+	@Autowired
+	private MinioService minioService;
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -137,4 +142,27 @@ public class BookServiceImpl implements BookService {
 	public Long countAll() {
 		return bookRepository.count();
 	}
+
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public BookModel uploadImage(Integer id, MultipartFile file) {
+		BookModel entity = new BookModel();
+		Book book = bookRepository.findById(id).orElse(null);
+		if (book == null)
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Book with id: " + id + " not found");
+		
+		// upload image
+		try {
+			String imageUrl = minioService.uploadImage(UUID.randomUUID().toString(),
+					file.getInputStream(), file.getContentType());
+			book.setImageUrl(imageUrl);
+			book = bookRepository.save(book);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new HttpServerErrorException(HttpStatus.BAD_REQUEST, "Problem upload file");
+		}
+		BeanUtils.copyProperties(book, entity);
+		return entity;
+	}
+	
 }

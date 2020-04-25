@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sekolahbackend.model.BookModel;
 import com.sekolahbackend.model.BookRequestCreateModel;
@@ -80,5 +82,11 @@ public class BookRestController {
 	@GetMapping("/findById/{id}")
 	public BookModel findById(@PathVariable("id") final Integer id) {
 		return bookService.findById(id);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PostMapping("/uploadImage/{id}")
+	public BookModel uploadImage(@PathVariable("id") final Integer id, @RequestParam("file") MultipartFile file) {
+		return bookService.uploadImage(id, file);
 	}
 }
