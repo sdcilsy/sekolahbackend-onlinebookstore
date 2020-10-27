@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sekolahbackend.entity.Persistence.Status;
 
 import lombok.Data;
 
@@ -25,4 +26,5 @@ public class PersistenceModel {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss", timezone = "GMT+7")
 	private Date updatedTime;
 	
+	private Status status;
 }

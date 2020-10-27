@@ -33,7 +33,7 @@ public class JpaConfigTest {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		HibernateJpaVendorAdapter hibernateJpa = new HibernateJpaVendorAdapter();
 		hibernateJpa.setDatabasePlatform("org.hibernate.dialect.HSQLDialect");
-		hibernateJpa.setShowSql(false);
+		hibernateJpa.setShowSql(true);
 		hibernateJpa.setGenerateDdl(true);
 
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
