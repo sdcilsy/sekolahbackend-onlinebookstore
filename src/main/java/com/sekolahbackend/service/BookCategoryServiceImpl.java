@@ -21,6 +21,11 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 
 	@Autowired
 	private BookCategoryRepository bookCategoryRepository;
+	
+	public BookCategoryServiceImpl(BookCategoryRepository bookCategoryRepository) {
+		super();
+		this.bookCategoryRepository = bookCategoryRepository;
+	}
 
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -115,4 +120,12 @@ public class BookCategoryServiceImpl implements BookCategoryService {
 	public Long countAll() {
 		return bookCategoryRepository.count();
 	}
+
+	@Override
+	@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+	public List<BookCategory> findByStatusNotActive() {
+		return bookCategoryRepository.findByStatusNotActive();
+	}
+	
+	
 }
