@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Where;
 
@@ -59,6 +60,7 @@ public class Book extends Persistence {
 	@Enumerated(EnumType.STRING)
 	private BookStatus bookStatus;
 	
+	@NotNull
 	@JoinColumn(name = "book_categori_id")
 	@ManyToOne(targetEntity = BookCategory.class, fetch = FetchType.LAZY)
 	private BookCategory bookCategory;
